@@ -1,21 +1,25 @@
 package domain;
 
+import org.springframework.stereotype.Component;
+
+
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 
 @Entity
+@Component
 public class Sala {
-
     private @Id @GeneratedValue Long id;
     int nrLocuri;
-    @OneToMany
-    List<Spectacol> listaSpectacole;
-    @OneToMany
-    List<Vanzare> listaVanzari;
+    @OneToMany(mappedBy = "sala")
+    Set<Spectacol> listaSpectacole;
+
+    @OneToMany(mappedBy = "sala")
+    Set<Vanzare> listaVanzari;
 
     public Sala(){}
 
-    public Sala(int nrLocuri, List<Spectacol> listaSpectacole, List<Vanzare> listaVanzari) {
+    public Sala(int nrLocuri, Set<Spectacol> listaSpectacole, Set<Vanzare> listaVanzari) {
         this.nrLocuri = nrLocuri;
         this.listaSpectacole = listaSpectacole;
         this.listaVanzari = listaVanzari;
@@ -29,19 +33,19 @@ public class Sala {
         this.nrLocuri = nrLocuri;
     }
 
-    public List<Spectacol> getListaSpectacole() {
+    public Set<Spectacol> getListaSpectacole() {
         return listaSpectacole;
     }
 
-    public void setListaSpectacole(List<Spectacol> listaSpectacole) {
+    public void setListaSpectacole(Set<Spectacol> listaSpectacole) {
         this.listaSpectacole = listaSpectacole;
     }
 
-    public List<Vanzare> getListaVanzari() {
+    public Set<Vanzare> getListaVanzari() {
         return listaVanzari;
     }
 
-    public void setListaVanzari(List<Vanzare> listaVanzari) {
+    public void setListaVanzari(Set<Vanzare> listaVanzari) {
         this.listaVanzari = listaVanzari;
     }
 

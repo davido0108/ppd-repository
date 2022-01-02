@@ -1,16 +1,17 @@
 package domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.stereotype.Component;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
+@Component
 public class Vanzare  implements Serializable {
 
     private @Id @GeneratedValue Long id;
@@ -20,9 +21,19 @@ public class Vanzare  implements Serializable {
     List<Long> listaLocuriVandute;
     int suma;
 
+    @ManyToOne
+    @JsonIgnore
+    private Spectacol spectacol;
+
+    @ManyToOne
+    @JsonIgnore
+    private Sala sala;
+
     public Vanzare(){}
 
-    public Vanzare(Date dataVanzare, int nrBileteVandute, List<Long> listaLocuriVandute, int suma) {
+    public Vanzare(Spectacol spectacol, Date dataVanzare, int nrBileteVandute, List<Long> listaLocuriVandute, int suma) {
+        this.spectacol = spectacol;
+        sala = spectacol.getSala();
         this.dataVanzare = dataVanzare;
         this.nrBileteVandute = nrBileteVandute;
         this.listaLocuriVandute = listaLocuriVandute;
