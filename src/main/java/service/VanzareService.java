@@ -146,21 +146,21 @@ public class VanzareService {
 
             lock.unlock();
 
-
             for (Long loc:locuri) {
-                if(spectacol.getListaLocuriVandute().contains(loc)){
+                if(s.get().getListaLocuriVandute().contains(loc)){
                     lockDictionary.get(spectacolId).unlock();
                     return "Incorect, Locurile sunt deja ocupate";
                 }
             }
 
-            Vanzare v = new Vanzare(spectacol,data,nrLocuri,locuri, sum);
+            Vanzare v = new Vanzare(s.get(),data,nrLocuri,locuri, sum);
 
             vanzareRepository.save(v);
 
+            //Update spectacol
             spectacol.setSold(spectacol.getSold() + sum);
             spectacol.getListaLocuriVandute().addAll(locuri);
-
+            spectacolRepository.saveAndFlush(spectacol);
 
             lockDictionary.get(spectacolId).unlock();
             return "Corect";

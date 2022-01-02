@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.*;
 import repository.SalaRepository;
 import repository.SpectacolRepository;
 
+import javax.annotation.PostConstruct;
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -14,8 +16,10 @@ import java.util.Optional;
 
 @RestController
 @CrossOrigin
+@Transactional
 @RequestMapping(path="/spectacol")
 public class SpectacolController {
+
     @Autowired
     private SpectacolRepository spectacolRepository;
 
