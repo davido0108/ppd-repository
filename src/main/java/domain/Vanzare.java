@@ -12,7 +12,7 @@ import javax.persistence.*;
 
 @Entity
 @Component
-public class Vanzare  implements Serializable {
+public class Vanzare{
 
     private @Id @GeneratedValue Long id;
     Date dataVanzare;
@@ -22,7 +22,6 @@ public class Vanzare  implements Serializable {
     int suma;
 
     @ManyToOne
-    @JsonIgnore
     private Spectacol spectacol;
 
     @ManyToOne
@@ -98,5 +97,21 @@ public class Vanzare  implements Serializable {
                 ", listaLocuriVandute=" + listaLocuriVandute +
                 ", suma=" + suma +
                 '}';
+    }
+
+    public Spectacol getSpectacol() {
+        return spectacol;
+    }
+
+    public void setSpectacol(Spectacol spectacol) {
+        this.spectacol = spectacol;
+    }
+
+    public Sala getSala() {
+        return sala;
+    }
+
+    public void setSala(Sala sala) {
+        this.sala = sala;
     }
 }

@@ -92,23 +92,26 @@ public class VanzareService {
         lock.unlock();
 
         List<Vanzare> vanzari =  new ArrayList<>(spectacol.getVanzari());
+        System.out.println(spectacol.getVanzari());
+        System.out.println(spectacol);
         int sold = spectacol.getSold();
         int vanzare_sold = 0;
         List<Long> vanzare_locuri = new ArrayList<>();
         for( Vanzare v : vanzari){
-            System.out.println("aici" + v.getSuma());
             vanzare_sold += v.getSuma();
             vanzare_locuri.addAll(v.getListaLocuriVandute());
         }
 
-        if(sold != vanzare_sold  || vanzare_locuri.containsAll(spectacol.getListaLocuriVandute())) {
-            System.out.println(sold + " " + vanzare_sold);
+        if(sold != vanzare_sold  || !vanzare_locuri.containsAll(spectacol.getListaLocuriVandute())) {
             //TODO: Erorare
             System.out.println("EROARE");
         }
         else
             //TODO: Corect
             System.out.println("CORECT");
+
+        lockDictionary.get(spectacol.getId()).unlock();
+
     }
 
     //Task verificare
@@ -229,7 +232,7 @@ public class VanzareService {
                 }
             }
 
-            Vanzare v = new Vanzare(s.get(),data,nrLocuri,locuri, sum);
+            Vanzare v = new Vanzare(spectacol,data,nrLocuri,locuri, sum);
 
             vanzareRepository.save(v);
 

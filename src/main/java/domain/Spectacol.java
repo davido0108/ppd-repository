@@ -29,7 +29,7 @@ public class Spectacol{
     @JsonIgnore
     private Sala sala;
 
-    @OneToMany
+    @OneToMany(mappedBy = "spectacol")
     private Set<Vanzare> vanzari;
 
     public Spectacol(){

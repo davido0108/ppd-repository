@@ -23,6 +23,7 @@ public class SpectacolController {
     @Autowired
     private SpectacolRepository spectacolRepository;
 
+
     @Autowired
     private SalaRepository salaRepository;
 
