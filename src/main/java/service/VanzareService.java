@@ -8,7 +8,6 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import repository.SpectacolRepository;
 import repository.VanzareRepository;
-import sun.net.www.http.HttpClient;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -25,7 +24,6 @@ import java.util.concurrent.locks.ReentrantLock;
 
 @Service
 public class VanzareService {
-    private static HttpURLConnection con;
 
     private ReentrantLock lock;
 
@@ -136,48 +134,7 @@ public class VanzareService {
     }*/
 
 
-    public void client() throws IOException {
-        String url = "http://localhost:8080/vanzare/add";
-        String urlParameters = "sid=3&titlu=Hamlet&pret=200&sold=100";
-        byte[] postData = urlParameters.getBytes(StandardCharsets.UTF_8);
 
-        try {
-
-            URL myurl = new URL(url);
-            con = (HttpURLConnection) myurl.openConnection();
-
-            con.setDoOutput(true);
-            con.setRequestMethod("POST");
-            con.setRequestProperty("User-Agent", "Java client");
-            con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-
-            try (DataOutputStream wr = new DataOutputStream(con.getOutputStream())) {
-
-                wr.write(postData);
-            }
-
-            StringBuilder content;
-
-            try (BufferedReader br = new BufferedReader(
-                    new InputStreamReader(con.getInputStream()))) {
-
-                String line;
-                content = new StringBuilder();
-
-                while ((line = br.readLine()) != null) {
-                    content.append(line);
-                    content.append(System.lineSeparator());
-                }
-            }
-
-            System.out.println(content.toString());
-
-        } finally {
-
-            con.disconnect();
-        }
-        System.out.println("done");
-    }
 
 
     @Async
