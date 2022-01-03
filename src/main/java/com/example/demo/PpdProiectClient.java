@@ -5,8 +5,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -18,7 +16,7 @@ import java.util.stream.Collectors;
 
 public class PpdProiectClient {
 
-    public static void sendSpectacol(Long id, List<Integer> locuri, int sum)  throws IOException {
+    public static void sendVanzare(Long id, List<Integer> locuri, int sum)  throws IOException {
         HttpURLConnection con = null;
         String url = "http://localhost:8080/vanzare/add";
         String locuriString = locuri.stream().map(String::valueOf)
@@ -59,16 +57,16 @@ public class PpdProiectClient {
         //System.out.println("done");
     }
 
-    public static void sendSpectacol1(List<Integer> locuri)  throws IOException{
-        sendSpectacol(2L, locuri, locuri.size() * 100);
+    public static void sendVanzare1(List<Integer> locuri)  throws IOException{
+        sendVanzare(2L, locuri, locuri.size() * 100);
     }
 
-    public static void sendSpectacol2(List<Integer> locuri)  throws IOException{
-        sendSpectacol(3L, locuri, locuri.size() * 200);
+    public static void sendVanzare2(List<Integer> locuri)  throws IOException{
+        sendVanzare(3L, locuri, locuri.size() * 200);
     }
 
-    public static void sendSpectacol3(List<Integer> locuri)  throws IOException{
-        sendSpectacol(4L, locuri, locuri.size() * 150);
+    public static void sendVanzare3(List<Integer> locuri)  throws IOException{
+        sendVanzare(4L, locuri, locuri.size() * 150);
     }
 
     public static void main(String[] args) throws IOException {
@@ -88,9 +86,9 @@ public class PpdProiectClient {
             elems.add(i + 10 * j);
 
                 try {
-                    sendSpectacol1(elems);
-                    sendSpectacol2(elems);
-                    sendSpectacol3(elems);
+                    sendVanzare1(elems);
+                    sendVanzare2(elems);
+                    sendVanzare3(elems);
 
                     Thread.sleep(2000);
                 } catch (IOException | InterruptedException e) {
