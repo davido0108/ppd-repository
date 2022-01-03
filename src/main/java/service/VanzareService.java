@@ -8,15 +8,24 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import repository.SpectacolRepository;
 import repository.VanzareRepository;
+import sun.net.www.http.HttpClient;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.annotation.security.RunAs;
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.locks.ReentrantLock;
 
 @Service
 public class VanzareService {
+    private static HttpURLConnection con;
 
     private ReentrantLock lock;
 
@@ -26,10 +35,20 @@ public class VanzareService {
     private ThreadPoolExecutor threadPoolExecutor;
 
     @PostConstruct
-    private void init(){
+    private void init() throws IOException {
         lock = new ReentrantLock();
         lockDictionary = new HashMap<>();
         threadPoolExecutor = (ThreadPoolExecutor) Executors.newFixedThreadPool(5);
+
+        Timer timer = new Timer();
+        timer.schedule(new CheckWorker(), 0 , 5000);
+
+    }
+
+    @PreDestroy
+    private void dest() throws IOException {
+        //join la worker
+
     }
 
     @Autowired
@@ -77,21 +96,23 @@ public class VanzareService {
         int vanzare_sold = 0;
         List<Long> vanzare_locuri = new ArrayList<>();
         for( Vanzare v : vanzari){
+            System.out.println("aici" + v.getSuma());
             vanzare_sold += v.getSuma();
             vanzare_locuri.addAll(v.getListaLocuriVandute());
         }
 
-        if(sold != vanzare_sold || vanzare_locuri.containsAll(spectacol.getListaLocuriVandute())) {
+        if(sold != vanzare_sold  || vanzare_locuri.containsAll(spectacol.getListaLocuriVandute())) {
+            System.out.println(sold + " " + vanzare_sold);
             //TODO: Erorare
             System.out.println("EROARE");
         }
-
-        //TODO: Corect
-        System.out.println("CORECT");
+        else
+            //TODO: Corect
+            System.out.println("CORECT");
     }
 
     //Task verificare
-    private class CheckWorker implements Runnable{
+    private class CheckWorker extends TimerTask implements Runnable {
         //TODO: implement
         @Override
         public void run() {
@@ -99,9 +120,62 @@ public class VanzareService {
             for(Spectacol s:spectacole){
                 checkSpectacol(s);
             }
-            //Checks every 2 secs every spectacol
+
+            //Checks every 5 secs every spectacol
         }
     }
+
+   /* private class Client {
+        @Override
+        public void run(){
+
+        }
+    }*/
+
+
+    public void client() throws IOException {
+        String url = "http://localhost:8080/vanzare/add";
+        String urlParameters = "sid=3&titlu=Hamlet&pret=200&sold=100";
+        byte[] postData = urlParameters.getBytes(StandardCharsets.UTF_8);
+
+        try {
+
+            URL myurl = new URL(url);
+            con = (HttpURLConnection) myurl.openConnection();
+
+            con.setDoOutput(true);
+            con.setRequestMethod("POST");
+            con.setRequestProperty("User-Agent", "Java client");
+            con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+
+            try (DataOutputStream wr = new DataOutputStream(con.getOutputStream())) {
+
+                wr.write(postData);
+            }
+
+            StringBuilder content;
+
+            try (BufferedReader br = new BufferedReader(
+                    new InputStreamReader(con.getInputStream()))) {
+
+                String line;
+                content = new StringBuilder();
+
+                while ((line = br.readLine()) != null) {
+                    content.append(line);
+                    content.append(System.lineSeparator());
+                }
+            }
+
+            System.out.println(content.toString());
+
+        } finally {
+
+            con.disconnect();
+        }
+        System.out.println("done");
+    }
+
 
     @Async
     public Future<String> addVanzare(Long spectacolId, Date date, int numSeats, List<Long> seats, int sum) throws ExecutionException, InterruptedException {
@@ -125,6 +199,8 @@ public class VanzareService {
             this.locuri = locuri;
             this.sum = sum;
         }
+
+
 
 
         @Override
