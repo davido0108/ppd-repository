@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 public class PpdProiectClient {
@@ -82,11 +83,10 @@ public class PpdProiectClient {
         @Override
         public void run() {
             List<Integer> elems = new ArrayList<>();
-            for(int j=0;j<10;++j){
-                for(int i=0; i<10; ++i) {
-                    elems.add(i + 10 * j);
+            int i = ThreadLocalRandom.current().nextInt(0, 10);
+            int j = ThreadLocalRandom.current().nextInt(0, 10);
+            elems.add(i + 10 * j);
 
-                }
                 try {
                     sendSpectacol1(elems);
                     sendSpectacol2(elems);
@@ -97,7 +97,7 @@ public class PpdProiectClient {
                     e.printStackTrace();
                 }
                 elems.clear();
-            }
+
     }
     }
 
