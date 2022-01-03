@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 public class PpdProiectClient {
 
@@ -14,7 +15,7 @@ public class PpdProiectClient {
         HttpURLConnection con = null;
 
         String url = "http://localhost:8080/vanzare/add";
-        String urlParameters = "sid=16&num=2&locuri=3,4&suma=200";
+        String urlParameters = "sid=2&num=2&locuri=3,4&suma=200";
         byte[] postData = urlParameters.getBytes(StandardCharsets.UTF_8);
 
         try {

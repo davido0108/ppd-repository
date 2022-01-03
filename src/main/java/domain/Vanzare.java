@@ -13,7 +13,6 @@ import javax.persistence.*;
 @Entity
 @Component
 public class Vanzare{
-
     private @Id @GeneratedValue Long id;
     Date dataVanzare;
     int nrBileteVandute;
@@ -22,6 +21,7 @@ public class Vanzare{
     int suma;
 
     @ManyToOne
+    @JsonIgnore
     private Spectacol spectacol;
 
     @ManyToOne

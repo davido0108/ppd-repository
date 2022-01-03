@@ -63,30 +63,6 @@ public class VanzareService {
     private VanzareRepository vanzareRepository;
 
 
-//    public String tryAddVanzare(Long spectacolId, Date date, int num, List<Long> locuriVandute, int sum){
-//
-//        Optional<Spectacol> spectacol = spectacolRepository.findById(spectacolId);
-//        if (!spectacol.isPresent())
-//            return "Incorect, Spectacolul nu a fost gasit";
-//
-//        //verifica locurile vandute
-//        for (Long loc:locuriVandute) {
-//            if(spectacol.get().getListaLocuriVandute().contains(loc))
-//                return "Incorect, Locurile sunt deja ocupate";
-//        }
-//
-//        //save vanzare
-//        Vanzare v = new Vanzare(spectacol.get(),date,num,locuriVandute,sum);
-//        vanzareRepository.save(v);
-//
-//        //update spectacol
-//        spectacol.get().getListaLocuriVandute().addAll(locuriVandute);
-//        spectacol.get().setSold(spectacol.get().getSold() + sum);
-//
-//        return "Corect";
-//
-//    }
-
     private void checkSpectacol(Spectacol spectacol){
         lock.lock();
 
@@ -132,17 +108,6 @@ public class VanzareService {
             //Checks every 5 secs every spectacol
         }
     }
-
-   /* private class Client {
-        @Override
-        public void run(){
-
-        }
-    }*/
-
-
-
-
 
     @Async
     public Future<String> addVanzare(Long spectacolId, Date date, int numSeats, List<Long> seats, int sum) throws ExecutionException, InterruptedException {
@@ -194,6 +159,11 @@ public class VanzareService {
                     lockDictionary.get(spectacolId).unlock();
                     return "Incorect, Locurile sunt deja ocupate";
                 }
+            }
+
+            if(locuri.size() * spectacol.getPretBilet() != sum){
+                lockDictionary.get(spectacolId).unlock();
+                return "Incorect, Suma pentru bilete este incorecta";
             }
 
             Vanzare v = new Vanzare(spectacol,data,nrLocuri,locuri, sum);
