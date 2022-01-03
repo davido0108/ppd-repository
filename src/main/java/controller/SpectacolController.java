@@ -9,16 +9,15 @@ import repository.SpectacolRepository;
 
 import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @CrossOrigin
 @Transactional
 @RequestMapping(path="/spectacol")
 public class SpectacolController {
+
+
 
     @Autowired
     private SpectacolRepository spectacolRepository;

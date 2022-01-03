@@ -32,8 +32,9 @@ public class Spectacol{
     @OneToMany(mappedBy = "spectacol")
     private Set<Vanzare> vanzari;
 
-    public Spectacol(){
-    }
+    public Spectacol(){}
+
+
     public Spectacol(Sala sala, Date dataSpectacol, String titlu, int pretBilet, List<Long> numarLocuriVandute, int sold) {
         this.sala = sala;
         this.dataSpectacol = dataSpectacol;

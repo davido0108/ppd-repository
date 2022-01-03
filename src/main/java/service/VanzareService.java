@@ -1,11 +1,13 @@
 package service;
 
 
+import domain.Sala;
 import domain.Spectacol;
 import domain.Vanzare;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import repository.SalaRepository;
 import repository.SpectacolRepository;
 import repository.VanzareRepository;
 
@@ -34,6 +36,12 @@ public class VanzareService {
 
     @PostConstruct
     private void init() throws IOException {
+        salaRepository.saveAndFlush(new Sala(100, new HashSet<>(), new HashSet<>()));
+
+        spectacolRepository.save(new Spectacol(salaRepository.getById(1L), new Date(), "S1",100, new ArrayList<Long>(), 0));
+        spectacolRepository.save(new Spectacol(salaRepository.getById(1L), new Date(), "S2",200, new ArrayList<Long>(), 0));
+        spectacolRepository.save(new Spectacol(salaRepository.getById(1L), new Date(), "S3",150, new ArrayList<Long>(), 0));
+
         lock = new ReentrantLock();
         lockDictionary = new HashMap<>();
         threadPoolExecutor = (ThreadPoolExecutor) Executors.newFixedThreadPool(5);
@@ -43,14 +51,13 @@ public class VanzareService {
 
     }
 
-    @PreDestroy
-    private void dest() throws IOException {
-        //join la worker
-
-    }
 
     @Autowired
     private SpectacolRepository spectacolRepository;
+
+    @Autowired
+    private SalaRepository salaRepository;
+
 
     @Autowired
     private VanzareRepository vanzareRepository;

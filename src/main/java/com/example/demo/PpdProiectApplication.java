@@ -5,10 +5,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import repository.SalaRepository;
+import repository.SpectacolRepository;
+import repository.VanzareRepository;
 
 //@SpringBootApplication
 @SpringBootApplication(scanBasePackages={"com.example.demo", "service", "controller", "domain"})
-@EnableJpaRepositories(basePackageClasses = {SalaRepository.class})
+@EnableJpaRepositories(basePackageClasses = {SpectacolRepository.class, VanzareRepository.class,SalaRepository.class})
 @EntityScan("domain")
 public class PpdProiectApplication {
 
